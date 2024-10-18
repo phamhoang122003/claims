@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h6 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 14px;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<h6>Dear leader,</h6>
+<p th:text="${'You have ' + size + ' complaints in pending status'}"></p>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Project Name</th>
+        <th>Staff Name</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="claim : ${claims}">
+        <td th:text="${claim.project.projectName}"></td>
+        <td th:text="${claim.staff.staffName}"></td>
+        <td th:text="${claim.status}"></td>
+        <td><a th:href="'http://localhost:8080' + ${#uris.escapePath('/requests-claims/view/' + claim.id)}">View</a></td>
+
+
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{layout/template::areas('Staff Information',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main class="col-md-10">
+    <div class="form-group col-md-6 mt-3 mb-3 d-flex align-items-center">
+    <label for="project" class="col-md-3 col-form-label">Project:</label>
+    <form th:action="@{/statisticalId}" method="post" class="w-75">
+        <div class="input-group">
+            <select class="form-control" name="project" id="project" aria-label="Select Project">
+                <option value="">Select a project</option>
+                <option th:each="project : ${projects}" th:selected="${id == project.id}" th:value="${project.id}" th:text="${project.projectName}"></option>
+            </select>
+            <button type="submit" class="btn btn-success ml-2">Statistics</button>
+        </div>
+    </form>
+</div>
+
+    <canvas id="claimsChart" width="400" height="200"></canvas>
+    <script>
+
+        let url = 'http://localhost:8080/rest/statistics';
+
+
+        let id = document.getElementById('project').value;
+
+        if(id){
+            url += `/${id}`; // Thêm id của dự án vào đuôi URL
+        }
+        // Gọi API để lấy dữ liệu ban đầu
+        renderClaimsChart(url);
+
+        function renderClaimsChart(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Định nghĩa tất cả trạng thái
+                    const allStatuses = ['Pending_Approval', 'Cancelled', 'Rejected', 'Approved', 'Paid', 'Draft'];
+                    // Tạo đối tượng để chứa số lượng cho từng trạng thái
+                    const counts = {};
+
+                    // Kiểm tra nếu không có dữ liệu cho claims
+                    if (!data || Object.keys(data).length === 0) {
+                        // Gán giá trị 0 cho tất cả các trạng thái nếu không có claims
+                        allStatuses.forEach(status => {
+                            counts[status] = 0;
+                        });
+                    } else {
+                        // Nếu có dữ liệu, gán giá trị từ data
+                        allStatuses.forEach(status => {
+                            counts[status] = data[status] || 0; // Nếu không có số lượng, gán giá trị 0
+                        });
+                    }
+
+                    // Lấy danh sách trạng thái và số lượng tương ứng
+                    const labels = Object.keys(counts);  // Các nhãn trạng thái
+                    const values = Object.values(counts);  // Số lượng tương ứng với mỗi trạng thái
+
+                    // Vẽ biểu đồ cột ngang bằng Chart.js
+                    const ctx = document.getElementById('claimsChart').getContext('2d');
+                    const claimsChart = new Chart(ctx, {
+                        type: 'bar', // Loại biểu đồ: cột ngang
+                        data: {
+                            labels: labels,  // Các nhãn trạng thái
+                            datasets: [{
+                                label: 'Số lượng Claims',
+                                data: values,  // Dữ liệu số lượng claims
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)'
+                                ],
+                                borderWidth: 1,
+                                barThickness: 60  // Đặt độ dày của các cột
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'x',  // Đặt trục X là trục dọc (hàng ngang)
+                            scales: {
+                                x: {
+                                    beginAtZero: true // Bắt đầu trục X từ 0
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Trạng thái' // Tiêu đề cho trục Y
+                                    }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+    </script>
+
+
+
+</main>
+</body>
+</html>

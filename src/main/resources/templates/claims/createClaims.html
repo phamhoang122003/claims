@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          th:replace="~{layout/template::areas('Create claims',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link  rel="stylesheet" href="/claimsCss/createClaimsCSS.css"/>
+</head>
+<body>
+<main class="col-md-10">
+    <link rel="stylesheet" th:href="@{/css/createClaimsCSS.css}">
+    <form th:action="@{/claims/save}" method="post" th:object="${claims}">
+        <input type="hidden" name="id" th:field="*{id}">
+        <div class="container1">
+            <h1>Quản Lý Dự Án</h1>
+
+            <div class="steps">
+                <div class="step active" data-step="1">Thông tin nhân viên</div>
+                <div class="step" data-step="2">Thông tin dự án</div>
+                <div class="step" data-step="3">Yêu cầu bồi thường</div>
+            </div>
+
+            <!-- Bước 1: Thông tin nhân viên -->
+
+            <div class="form-step active" data-step="1">
+                <!-- Tên nhân viên -->
+                <div class="form-group">
+                    <label for="employee-name">Tên nhân viên:</label>
+                    <input type="text" id="employee-name" name="staffName" th:field="*{staff.staffName}">
+                </div>
+
+                <!-- Phòng nhân sự -->
+                <div class="form-group">
+                    <label for="department">Phòng nhân sự:</label>
+                    <input id="department" th:field="*{staff.department}"/>
+                </div>
+
+                <!-- Mã nhân viên -->
+                <div class="form-group">
+                    <label for="employee-id">Mã nhân viên:</label>
+                    <input type="text" id="employee-id" name="staffId" th:field="*{staff.staffId}">
+                </div>
+            </div>
+
+            <!-- Bước 2: Thông tin dự án -->
+            <div class="form-step" data-step="2">
+                <!-- Tên dự án -->
+                <div class="form-group">
+                    <label for="project-name">Tên dự án:</label>
+                    <select id="project-name" name="projectName" required>
+                        <option value="">Chọn dự án</option>
+
+                        <!-- Hiển thị selectedProject lên đầu nếu nó không null -->
+                        <th:block th:if="${selectedProject != null}">
+                            <option th:value="${selectedProject.id}"
+                                    th:data-start-date="${selectedProject.fromDate}"
+                                    th:data-end-date="${selectedProject.toDate}"
+                                    th:text="${selectedProject.projectName}"
+                                    th:data-role="${projectRoles[selectedProject.id]}"
+                                    selected
+                            ></option>
+                        </th:block>
+
+                        <!-- Lặp qua các dự án khác, bỏ qua selectedProject nếu nó đã được hiển thị -->
+                        <th:block th:each="project : ${projects}">
+                            <th:block th:if="${selectedProject == null || project.id != selectedProject.id}">
+                                <option th:value="${project.id}"
+                                        th:data-start-date="${project.fromDate}"
+                                        th:data-end-date="${project.toDate}"
+                                        th:text="${project.projectName}"
+                                        th:data-role="${projectRoles[project.id]}"
+                                ></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+
+
+                </div>
+
+                <!-- Vai trò trong dự án -->
+                <div class="form-group">
+                    <label for="role">Vai trò trong dự án:</label>
+                    <input type="text" id ="role" name="role">
+                </div>
+
+                <!-- Thời lượng dự án -->
+                <div class="form-group">
+                    <label>Thời gian dự án:</label>
+                    <div class="time-inputs">
+                        <input type="date" id="project-start-time" name="projectStartTime" placeholder="Bắt đầu">
+                        <input type="date" id="project-end-time" name="projectEndTime" placeholder="Kết thúc">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bước 3: Yêu cầu bồi thường -->
+            <div class="form-step" data-step="3">
+                <div class="table-responsive">
+
+
+                <table class="table table-bordered" id="claims-table">
+                    <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Thứ trong tuần</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Thời gian kết thúc</th>
+                        <th>Tổng số giờ</th>
+                        <th>Ghi chú</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody id="claims-body">
+
+                    <tr th:each="claimDay, iterStat : ${claims.claimDays}">
+                        <td>
+                            <input type="date" id="day" th:field="*{claimDays[__${iterStat.index}__].date}" class="day" name="claimDays[0].date"  >
+                        </td>
+                        <td>
+                            <input type="text" class="day-of-week" id="day-of-week" name="claimDays[0].day" th:field="*{claimDays[__${iterStat.index}__].day}" readonly >
+                        </td>
+                        <td>
+                            <input type="time" class="start-time" id="start-time" name="claimDays[0].fromDate" th:field="*{claimDays[__${iterStat.index}__].fromDate}">
+                        </td>
+                        <td>
+                            <input type="time" class="end-time" id="end-time" name="claimDays[0].toDate" th:field="*{claimDays[__${iterStat.index}__].toDate}">
+                        </td>
+                        <td>
+                            <input type="text" class="total-hours" id="total-hours" name="claimDays[0].totalOfHours" th:field="*{claimDays[__${iterStat.index}__].totalOfHours}" readonly >
+                        </td>
+                        <td>
+                            <textarea class="remarks" name="claimDays[0].description" th:field="*{claimDays[__${iterStat.index}__].description}" rows="2" ></textarea>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger remove-btn">Cancel</button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- Nút thêm ngày mới -->
+                <button type="button" class="btn btn-primary mt-3" id="add-day-btn">+Add Day</button>
+                <div class="action-buttons">
+
+                    <button type="submit" name="action" value="save" class="btn save-btn">Save</button>
+                    <button type="submit" name="action" value="submit" class="btn submit-btn">Submit</button>
+<!--                    <button type="button" class="btn approve-btn">Approve</button>-->
+<!--                    <button type="button" class="btn reject-btn">Reject</button>-->
+<!--                    <button type="button" class="btn return-btn">Return</button>-->
+<!--                    <button type="button" class="btn print-btn">Print</button>-->
+<!--                    <button type="button" class="btn cancel-request-btn">Cancel Request</button>-->
+<!--                    <button type="button" class="btn cancel-btn">Cancel</button>-->
+                    <a th:href="@{/}" class="btn close-btn">Close</a>
+                </div>
+            </div>
+
+
+
+
+
+            <!-- Nút hành động -->
+            <div class="action-buttons navigation-buttons">
+                <button type="button" class="btn prev-btn" onclick="prevStep()">Quay lại</button>
+                <button type="button" class="btn next-btn" onclick="nextStep()">Tiếp theo</button>
+
+            </div>
+        </div>
+
+    </form>
+    <script th:src="@{/js/CreateClaim.js}"></script>
+    <script th:src="@{/js/create2.js}"></script>
+</main>
+
+</body>
+</html>

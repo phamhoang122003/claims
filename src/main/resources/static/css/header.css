@@ -1,0 +1,48 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+li:hover {
+    cursor: pointer;
+}
+
+.caret {
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid white ;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+.user {
+    position: relative;
+}
+
+.user-list {
+    list-style: none;
+    position: absolute;
+    right: 0;
+    top: 53px;
+    display: none;
+    z-index: 1;
+}
+
+.user-list li {
+    width: 130px;
+    border: 1px solid lightgrey;
+    padding: 5px;
+}
+
+.fa-user {
+    color:white;
+}
+.bg-menu {
+    background-color: #5a6268; /* Màu nền cho mục đang chọn */
+}

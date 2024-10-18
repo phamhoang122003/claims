@@ -1,0 +1,212 @@
+/* Tổng quan */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+.container1 {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+ /*Tiêu đề */
+/*h1 {*/
+/*    text-align: center;*/
+/*    color: #2c3e50;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/* Các bước (Steps) */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.step {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    cursor: pointer;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
+}
+
+/* Bước đầu tiên và bước cuối cùng */
+.step:first-child {
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+}
+
+.step:last-child {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 10% 50%);
+}
+
+.step.active {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Form Bước */
+.form-step {
+    width: 100%;
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* Nhóm Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Nút hành động */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.action-buttons .btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-buttons .btn:hover {
+    background-color: #2980b9;
+}
+
+/* Ẩn các nút khi không cần thiết */
+.action-buttons .prev-btn,
+.action-buttons .next-btn {
+    display: inline-block; /* Hiển thị mặc định */
+}
+
+.action-buttons .prev-btn {
+    display: none; /* Ẩn nút Quay lại khi ở bước đầu tiên */
+}
+
+.action-buttons .next-btn {
+    display: inline-block; /* Hiển thị mặc định */
+}
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.time-inputs {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa hai trường nhập */
+}
+
+.time-inputs input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+/* Căn chỉnh cho các nút */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Khoảng cách giữa các nút */
+    margin-top: 20px;
+}
+
+/* Định dạng chung cho các nút */
+.action-buttons .btn {
+    background-color: #007bff; /* Màu nền */
+    border: none;
+    color: white; /* Màu chữ */
+    padding: 8px 12px; /* Kích thước nhỏ hơn */
+    font-size: 14px; /* Kích thước chữ nhỏ hơn */
+    border-radius: 4px; /* Bo góc */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hiệu ứng khi hover */
+.action-buttons .btn:hover {
+    background-color: #0056b3; /* Màu nền xanh đậm hơn khi hover */
+    transform: scale(1.05); /* Tăng kích thước nhẹ khi hover */
+}
+
+/* Hiệu ứng khi nhấn */
+.action-buttons .btn:active {
+    background-color: #003d7a; /* Màu nền khi nút được nhấn */
+    transform: scale(0.95); /* Giảm kích thước nhẹ khi nhấn */
+}
+.navigation-buttons {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa nút Quay lại và Tiếp tục */
+}
+#total-hours,#day-of-week {
+    background-color: #f0f0f0; /* Màu nền tối hơn */
+    color: #333; /* Màu chữ tối */
+    border: 1px solid #ccc; /* Viền nhẹ */
+    padding: 8px; /* Padding cho sự thoải mái khi nhập liệu */
+    border-radius: 4px; /* Bo góc nhẹ */
+}
+.table-responsive {
+    width: 100%;
+    max-height: 300px; /* Giới hạn chiều cao */
+    overflow-y: auto;  /* Kích hoạt cuộn dọc khi vượt quá chiều cao */
+}
+form {
+    max-height: 80vh; /* Chiều cao tối đa là 80% của chiều cao màn hình */
+    overflow-y: auto;  /* Kích hoạt cuộn dọc nếu nội dung vượt quá chiều cao */
+}
+
+/* Các nút cụ thể */
+.action-buttons .save-btn { background-color: #28a745; } /* Xanh lá cho Save */
+.action-buttons .submit-btn { background-color: #17a2b8; } /* Xanh dương cho Submit */
+.action-buttons .approve-btn { background-color: #ffc107; } /* Vàng cho Approve */
+.action-buttons .reject-btn { background-color: #dc3545; } /* Đỏ cho Reject */
+.action-buttons .return-btn { background-color: #6c757d; } /* Xám cho Return */
+.action-buttons .print-btn { background-color: #007bff; } /* Xanh dương cho Print */
+.action-buttons .cancel-request-btn { background-color: #17a2b8; } /* Xanh dương cho Cancel Request */
+.action-buttons .cancel-btn { background-color: #dc3545; } /* Đỏ cho Cancel */
+.action-buttons .close-btn { background-color: #6c757d; } /* Xám cho Close */
+

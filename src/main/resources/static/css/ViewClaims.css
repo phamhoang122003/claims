@@ -1,0 +1,55 @@
+.pagination {
+    justify-content: center;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #dee2e6;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.filter-buttons a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.text-right a.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.text-right a.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.form-inline select {
+    width: auto;
+    margin-right: 10px;
+}
+thead a {
+    color: white; /* Set text color to white */
+    text-decoration: none; /* Optional: Remove underline from links */
+}
+
+thead a:hover {
+    color: cyan; /* Optional: Set a different color on hover */
+}

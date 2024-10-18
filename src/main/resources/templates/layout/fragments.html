@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+</head>
+<body>
+<div th:fragment="header">
+    <header class="col-md-12 header bg-dark border-bottom">
+        <div class="container-fluid  text-white">
+            <div class="row justify-content-between align-items-center">
+                <h4>Fpt software</h4>
+                <div id="user" class="user p-2">
+                    <i class="fa-solid fa-user"></i><span class="caret"></span>
+                    <ul class="user-list">
+                        <li id="logout"><a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i> Log out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+
+<div th:fragment="menu" class="col-md-2 bg-secondary min-vh-100">
+    <nav class="navbar w-100 p-0">
+        <ul class="navbar-nav w-100 p-0">
+            <li class="nav-item" th:class="${currentUri.contains('/statistical') ? 'bg-menu' : ''}">
+                <a sec:authorize="hasAuthority('ADMIN')" class="nav-link text-white" th:href="@{/statistical}">Thống kê</a>
+            </li>
+            <li class="nav-item" th:class="${currentUri.contains('/claims')} ? 'bg-menu' : ''">
+                <a class="nav-link text-white" sec:authorize="hasAuthority('USER')" th:href="@{/claims/view}">My claims</a>
+            </li>
+            <li class="nav-item" th:class="${currentUri.contains('/project') ? 'bg-menu' : ''}">
+                <a sec:authorize="hasAuthority('ADMIN')" class="nav-link text-white" th:href="@{/project/list}">Project Information</a>
+            </li>
+            <li class="nav-item" th:class="${currentUri.contains('/staff')} ? 'bg-menu' : ''">
+                <a sec:authorize="hasAuthority('ADMIN')" class="nav-link text-white" th:href="@{/staff/list}">Staff Information</a>
+            </li>
+            <li class="nav-item" th:class="${currentUri.contains('/requests-claims')} ? 'bg-menu' : ''">
+                <a class="nav-link text-white" th:href="@{/requests-claims/access}">Claims request for project</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+
+
+
+<div th:fragment="footer">
+    <footer class=" col-md-12 bg-dark text-white py-4 footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Information -->
+                <div class="col-md-6 ">
+                    <h5>About Us</h5>
+                    <p>We are committed to providing top-notch support for your claims requests. Our team is here to help you every step of the way.</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Claims Avenue, Suite 456, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 (800) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> nguyenhunghkt959@gmail.com</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p class="mb-0">&copy; 2024 Claims Request. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>

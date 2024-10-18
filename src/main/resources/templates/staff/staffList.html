@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{layout/template::areas('List Staff',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <main class="col-md-10">
+        <div class="row justify-content-between">
+            <a sec:authorize="hasAuthority('ADMIN')" class="btn btn-primary" th:href="@{/staff/create}">Create new staff</a>
+            <form id="frmSearch" th:action="@{/staff/list}" class="d-flex" method="post">
+                <input type="text" class="form-control" id="search" placeholder="Search...." name="search" th:value="${param.search}">
+                <input type="submit" class="btn btn-primary" value="search">
+            </form>
+        </div>
+        <div th:if="${ message != null }" class="alert alert-success">
+            <span th:text="${message}"></span>
+        </div>
+        <h2 class="text-center">Staff List</h2>
+        <table class="table table-striper">
+            <thead>
+            <th>No</th>
+            <th>staff name</th>
+            <th>email</th>
+            <th>job rank</th>
+            <th>department</th>
+            <th>action</th>
+            </thead>
+            <tbody>
+            <tr th:each="staff,iterStat : ${page.content}">
+                <td th:text="${iterStat.index+1}"></td>
+                <td th:text="${staff.staffName}"></td>
+                <td th:text="${staff.email}"></td>
+                <td th:text="${staff.jobRank}"></td>
+                <td th:text="${staff.department}"></td>
+                <td>
+                    <a  th:href="@{/staff/edit(id=${staff.staffId})}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a  th:href="@{/staff/delete(id=${staff.staffId})}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row justify-content-center mt-2">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li th:if="${page.hasPrevious()}" class="page-item"><a class="page-link" th:href="@{/staff/list(page=${page.getNumber()})}">Previous</a></li>
+
+                    <th:block th:each="pageNum : ${pageNumber}">
+                        <th:block th:if="${ pageNum == (page.getNumber() + 1) }">
+                            <li class="page-item active">
+                                <a class="page-link" th:href="@{/staff/list(page=${pageNum},search=${param.search})}" th:text="${pageNum}"></a>
+                            </li>
+                        </th:block>
+
+                        <th:block th:if="${ pageNum != (page.getNumber() + 1) }">
+                            <li class="page-item">
+                                <a class="page-link" th:href="@{/staff/list(page=${pageNum})}" th:text="${pageNum}"></a>
+                            </li>
+                        </th:block>
+                    </th:block>
+
+                    <li th:if="${page.hasNext()}" class="page-item"><a class="page-link" th:href="@{/staff/list(page=${page.getNumber()+2})}">Next</a></li>
+                </ul>
+
+
+            </nav>
+        </div>
+    </main>
+</body>
+</html>

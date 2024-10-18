@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template::areas('claims-request',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Claims Requests</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<main class="container mt-4">
+        <h2>Claims Requests</h2>
+        <button type="button" class="btn btn-primary mb-3" onclick="confirmDownload()">Download Selected Claims</button>
+        <button th:if="${ role == 'QA' || role == 'ADMIN'}" type="button" class="btn btn-success mb-3" onclick="confirmMultiplePaid()">Mark Selected as Paid</button>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Select</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="claim : ${claims}">
+                <td>
+                    <input type="checkbox" name="claimIds" th:value="${claim.id}">
+                </td>
+                <td th:text="${claim.id}"></td>
+                <td th:text="${claim.status}"></td>
+                <td th:text="${claim.date}"></td>
+                <td>
+                    <button th:if="${claim.status.toString() == 'Pending_Approval' || role == 'ADMIN'}"
+                            type="button"
+                            class="btn btn-success btn-sm"
+                            th:attr="onclick='confirmApproval(' + ${claim.id} + ')'">
+                        Approve
+                    </button>
+                    <button th:if="${claim.status.toString() == 'Pending_Approval' || role == 'ADMIN'}"
+                            type="button"
+                            class="btn btn-danger btn-sm"
+                            th:attr="onclick='confirmRejection(' + ${claim.id} + ')'">
+                        Reject
+                    </button>
+                    <button th:if="${(claim.status.toString() == 'Approved' && role == 'QA') || role == 'ADMIN'}"
+                            type="button"
+                            class="btn btn-info btn-sm"
+                            th:attr="onclick='confirmPaid(' + ${claim.id} + ')'">
+                        Paid
+                    </button>
+                    <button th:if="${claim.status.toString() == 'Draft' || role == 'ADMIN'}"
+                            type="button"
+                            class="btn btn-warning btn-sm"
+                            th:onclick="'confirmCancellation(' + ${claim.id} + ')'">
+                        Cancel
+                    </button>
+                    <a th:href="@{/requests-claims/view/{id}(id=${claim.id})}" class="btn btn-primary btn-sm">View</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    <script>
+        function confirmApproval(claimId) {
+            if (confirm("Are you sure you want to approve this claim?")) {
+                window.location.href = '/requests-claims/approve/' + claimId;
+            }
+        }
+
+        function confirmRejection(claimId) {
+            if (confirm("Are you sure you want to reject this claim?")) {
+                window.location.href = '/requests-claims/reject/' + claimId;
+            }
+        }
+
+        function confirmPaid(claimId) {
+            if (confirm("Are you sure you want to mark this claim as paid?")) {
+                window.location.href = '/requests-claims/pay/' + claimId;
+            }
+        }
+
+        function confirmMultiplePaid() {
+            const selectedClaims = Array.from(document.querySelectorAll('input[name="claimIds"]:checked')).map(el => el.value);
+            if (selectedClaims.length === 0) {
+                alert("No claims selected.");
+                return;
+            }
+            if (confirm("Are you sure you want to mark the selected claims as paid?")) {
+                window.location.href = '/requests-claims/pay-multiple/' + selectedClaims.join(',');
+            }
+        }
+
+        function confirmCancellation(claimId) {
+            if (confirm("Are you sure you want to cancel this claim?")) {
+                window.location.href = '/requests-claims/cancel/' + claimId;
+            }
+        }
+
+        function confirmDownload() {
+            const selectedClaims = Array.from(document.querySelectorAll('input[name="claimIds"]:checked')).map(el => el.value);
+
+            if (selectedClaims.length === 0) {
+                alert("No claims selected.");
+                return;
+            }
+
+            if (confirm("Are you sure you want to download the selected claims?")) {
+                const encodedIds = encodeURIComponent(selectedClaims.join(','));
+                window.location.href = `/requests-claims/download?ids=${encodedIds}`;
+            }
+        }
+    </script>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template::areas('Project Information',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<main class="col-md-10">
+    <h1>Project Information</h1>
+    <span th:if="${message}" class="col-md-12 alert alert-danger float-right" th:text="${message}"></span>
+    <form th:action="@{/project/save}" method="post" th:object="${project}">
+        <input type="hidden" name="id" th:field="*{id}">
+        <div class="form-group">
+            <label for="projectName">Project name:</label>
+            <input type="text" class="form-control" id="projectName" placeholder="Enter project name" name="projectName"  th:field="*{projectName}">
+            <span class="text-danger" th:if="${#fields.hasErrors('projectName')}" th:errorclass="error" th:errors="*{projectName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="projectName">Project code:</label>
+            <input type="text" class="form-control" id="projectCode" placeholder="Enter project code" name="projectCode" th:field="*{projectCode}">
+            <span class="text-danger" th:if="${#fields.hasErrors('projectCode')}" th:errorclass="error" th:errors="*{projectCode}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="fromDate">From date:</label>
+            <input type="date" class="form-control" id="fromDate"  name="fromDate" th:field="*{fromDate}">
+            <span class="text-danger" th:if="${#fields.hasErrors('fromDate')}" th:errorclass="error" th:errors="*{fromDate}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="toDate">To date:</label>
+            <input type="date" class="form-control" id="toDate"  name="toDate" th:field="*{toDate}">
+            <span class="text-danger" th:if="${#fields.hasErrors('toDate')}" th:errorclass="error" th:errors="*{toDate}"></span>
+        </div>
+
+        <table th:if="*{id == null}" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Position</th>
+                <th>Staff name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <select class="border-none" name="position">
+                        <option value="0">Select-position</option>
+                        <option value="BA">BA</option>
+                        <option value="PM">PM</option>
+                        <option value="QA">QA</option>
+                        <option value="DEVELOPER">DEVELOPER</option>
+                        <option value="TESTERS">TESTERS</option>
+                        <option value="TECHNICAL_LEAD">TECHNICAL_LEAD</option>
+                        <option value="TECHNICAL_CONSULTANCY">TECHNICAL_CONSULTANCY</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="border-none" name="staffId">
+                        <option value="0">Select-name</option>
+                        <option th:each="staff : ${staffList}" th:value="${staff.staffId}" th:text="${staff.staffName}"></option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+            <button type="button" class="btn btn-success float-right addRow">+</button>
+            <input type="hidden" name="contextPath" th:value="@{/}"/>
+        </table>
+        <table th:if="*{id != null}" id="staffTable" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Position</th>
+                <th>Staff name</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <button type="button" class="btn btn-success float-right addRow">+</button>
+            <input type="hidden" name="contextPath" th:value="@{/}"/>
+        </table>
+
+
+
+        <div class="form-group float-right">
+            <button type="submit" class="btn btn-success "><i class="fa-regular fa-floppy-disk"></i> Save</button>
+            <button type="reset" class="btn btn-primary" >Reset</button>
+            <a th:href="@{/project/list}" class="btn btn-primary" ><i class="fa-solid fa-share-from-square"></i> Cancel</a>
+        </div>
+
+
+    </form>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template::areas('View claims',~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="/claimsCss/viewClaimsCSS.css"/>-->
+</head>
+<body>
+<main class="col-md-10">
+    <link rel="stylesheet" th:href="@{/css/ViewClaims.css}">
+    <div class="container mt-5">
+        <h1 class="text-center">View Claims</h1>
+
+        <!-- Các nút lọc trạng thái -->
+        <div class="btn-group mb-4" role="group" aria-label="Filter Buttons">
+            <a th:href="@{/claims/view?status=All}"
+               class="btn btn-secondary" th:classappend="${status == 'All'} ? 'active' : ''">All</a>
+            <a th:href="@{/claims/view?status=Draft}"
+               class="btn btn-secondary" th:classappend="${status == 'Draft'} ? 'active' : ''">Draft</a>
+            <a th:href="@{/claims/view?status=Pending_Approval}"
+               class="btn btn-secondary" th:classappend="${status == 'Pending_Approval'} ? 'active' : ''">Pending Approval</a>
+            <a th:href="@{/claims/view?status=Approved}"
+               class="btn btn-secondary" th:classappend="${status == 'Approved'} ? 'active' : ''">Approved</a>
+            <a th:href="@{/claims/view?status=Rejected}"
+               class="btn btn-secondary" th:classappend="${status == 'Rejected'} ? 'active' : ''">Rejected</a>
+        </div>
+
+        <!-- Bảng hiển thị yêu cầu bồi thường -->
+        <table class="table table-bordered table-striped mt-4">
+            <thead class="thead-dark">
+            <tr>
+                <th>
+                    <a th:href="@{/claims/view(sort='id', direction=${sort == 'id' and direction == 'asc' ? 'desc' : 'asc'}, status=${status})}">
+                        Claim ID
+                        <span th:if="${sort == 'id'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/claims/view(sort='staff.staffName', direction=${sort == 'staff.staffName' and direction == 'asc' ? 'desc' : 'asc'}, status=${status})}">
+                        Staff Name
+                        <span th:if="${sort == 'staff.staffName'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/claims/view(sort='project.projectName', direction=${sort == 'project.projectName' and direction == 'asc' ? 'desc' : 'asc'}, status=${status})}">
+                        Project Name
+                        <span th:if="${sort == 'project.projectName'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/claims/view(sort='date', direction=${sort == 'date' and direction == 'asc' ? 'desc' : 'asc'}, status=${status})}">
+                        Project Duration
+                        <span th:if="${sort == 'date'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+                    </a>
+                </th>
+
+                <th>
+                    <a th:href="@{/claims/view(sort='status', direction=${sort == 'status' and direction == 'asc' ? 'desc' : 'asc'}, status=${status})}">
+                        Status
+                        <span th:if="${sort == 'status'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+                    </a>
+                </th>
+                <th>Actor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="claim : ${claimsPage}">
+                <td th:text="${claim.id}"></td>
+                <td th:text="${claim.staff != null} ? ${claim.staff.staffName} : 'N/A'"></td>
+                <td th:text="${claim.project.projectName}"></td>
+
+                <td>
+                    <ul>
+                        <li th:each="claimsday : ${claim.claimDays}"
+                            th:text="${claimsday.date + ' ' + claimsday.fromDate + ' - ' + claimsday.toDate}">
+                        </li>
+                    </ul>
+                </td>
+
+
+                <td th:text="${claim.status}"></td>
+                <td>
+                    <a th:href="@{/claims/update/{id}(id=${claim.id})}" class="btn btn-primary btn-sm">Update</a>
+                    <a th:href="@{/claims/delete/{id}(id=${claim.id})}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <form method="get" action="/claims/view">
+                    <label for="size">Số lượng hiển thị:</label>
+                    <select id="size" name="size" onchange="this.form.submit()">
+                        <option th:value="5" th:selected="${pageSize == 5}">5</option>
+                        <option th:value="10" th:selected="${pageSize == 10}">10</option>
+                        <option th:value="15" th:selected="${pageSize == 15}">15</option>
+                    </select>
+                    <input type="hidden" name="status" th:value="${status}"/>
+                </form>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/claims/view(page=${currentPage - 1}, size=${pageSize}, status=${status})}">Previous</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link" th:text="${currentPage + 1} + ' / ' + ${totalPages}"></span>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/claims/view(page=${currentPage + 1}, size=${pageSize}, status=${status})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="text-right">
+            <a th:href="@{/claims/create}" class="btn btn-success">Tạo Yêu Cầu Mới</a>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
