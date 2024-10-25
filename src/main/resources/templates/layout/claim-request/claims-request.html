@@ -22,7 +22,6 @@
                 <th>Select</th>
                 <th>ID</th>
                 <th>Status</th>
-                <th>Date</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -33,7 +32,7 @@
                 </td>
                 <td th:text="${claim.id}"></td>
                 <td th:text="${claim.status}"></td>
-                <td th:text="${claim.date}"></td>
+<!--                <td th:text="${claim.date}"></td>-->
                 <td>
                     <button th:if="${claim.status.toString() == 'Pending_Approval' || role == 'ADMIN'}"
                             type="button"

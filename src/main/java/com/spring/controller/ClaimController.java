@@ -1,6 +1,7 @@
 package com.spring.controller;
 
 import com.spring.entities.Claims;
+import com.spring.entities.ClaimsDetails;
 import com.spring.entities.RoleStaff;
 import com.spring.entities.Staff;
 import com.spring.repository.ClaimRepository;
@@ -40,6 +41,7 @@ public class ClaimController {
     private ClaimsService claimsService;
     @Autowired
     private ClaimRepository claimRepository;
+
 
     @ModelAttribute("currentUri")
     public String getCurrentUri(HttpServletRequest request) {

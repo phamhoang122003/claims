@@ -29,6 +29,7 @@
                     <th>From Time</th>
                     <th>To Time</th>
                     <th>Total Hours</th>
+                    <th>Money <small>đ</small></th>
                     <th>Description</th>
                 </tr>
                 </thead>
@@ -39,12 +40,15 @@
                     <td th:text="${claimDetail.fromDate}"></td>
                     <td th:text="${claimDetail.toDate}"></td>
                     <td th:text="${claimDetail.totalOfHours}"></td>
+                    <td th:text="${claimDetail.totalOfHours * 100000}">
+
+                    </td>
                     <td th:text="${claimDetail.description}"></td>
                 </tr>
                 </tbody>
             </table>
 
-            <a th:href="@{/claims-requests}" class="btn btn-secondary">Back to Claims</a>
+            <a th:href="@{/requests-claims}" class="btn btn-secondary">Back to Claims</a>
         </div>
     </div>
 
